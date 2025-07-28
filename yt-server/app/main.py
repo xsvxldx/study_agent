@@ -2,14 +2,19 @@ from fastapi import FastAPI, Form, HTTPException
 from fastapi.responses import FileResponse
 from yt_dlp import YoutubeDL
 from pathlib import Path
+from pydantic import BaseModel
 import uuid
 
 app = FastAPI()
-AUDIO_DIR = Path("/app/downloads")
+AUDIO_DIR = Path(__file__).parent.parent / "downloads"
 AUDIO_DIR.mkdir(parents=True, exist_ok=True)
 
+class AudioRequest(BaseModel):
+    youtube_url: str
+
 @app.post("/download-audio/")
-async def download_audio(youtube_url: str = Form(...)):
+async def download_audio(request: AudioRequest):
+    youtube_url = request.youtube_url
     audio_id = str(uuid.uuid4())
     output_path = AUDIO_DIR / f"{audio_id}.mp3"
 
@@ -31,7 +36,7 @@ async def download_audio(youtube_url: str = Form(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
     return {
-        "audio_url": f"http://yt-dlp-server:8000/audio/{audio_id}.mp3"
+        "audio_url": f"http://yt-server:8000/audio/{audio_id}.mp3"
     }
 
 @app.get("/audio/{filename}")

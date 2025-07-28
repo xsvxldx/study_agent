@@ -1,0 +1,69 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "yt-2-knowledge",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "aa613d67-09a1-4b70-82e7-3fb16eba593e",
+      "name": "Webhook",
+      "webhookId": "6c397708-7efe-4c94-997c-b210db3970d3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://yt-server:8000/download-audio/",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "youtube_url",
+              "value": "={{ $json.body.youtube_url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "4ed91c91-c77a-43ea-9875-cf5f619e8e08",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "53c4ea58-e941-47d6-969d-b45daade7288",
+  "meta": {
+    "instanceId": "07634486bb152e4899c81cd1ac5150fb00d21d72bb041aeb6e9393b207e6fda2"
+  },
+  "id": "fC55ObMJ8i1qOB2v",
+  "tags": []
+}
